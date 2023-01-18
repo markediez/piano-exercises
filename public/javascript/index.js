@@ -67,8 +67,12 @@ function onMIDImessage(messageData) {
   var velocity = messageData.data[2];
 
   var letterNote = toLetterNote(note);
-  var newItem = document.createElement('li');
-  newItem.appendChild(document.createTextNode(letterNote));
-  newItem.className = 'user-midi';
-  document.getElementById('midi-data').prepend(newItem);
+
+  var el = document.querySelector(`[data-note='${letterNote}']`)
+  // Would use @noteOn instead of velocity... but noteOn is always 144 (on) for some midi keyboards
+  if (velocity > 0) {
+    el.classList.add("active");
+  } else {
+    el.classList.remove("active");
+  }
 }

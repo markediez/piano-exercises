@@ -1,0 +1,7 @@
+ul#keyboard li {
+    display: block;
+}
+
+ul#keyboard li.active {
+    background-color: lightblue;
+}
