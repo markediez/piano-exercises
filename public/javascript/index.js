@@ -58,13 +58,14 @@ function toLetterNote(input) {
 }
 
 function onMIDImessage(messageData) {
-  if (messageData.data == 254) {
-    return;
-  }
-
   var noteOn = messageData.data[0] 
   var note = messageData.data[1]
   var velocity = messageData.data[2];
+
+  if (note === undefined) {
+    // Something sent constantly by the midi that we don't care about
+    return;
+  }
 
   var letterNote = toLetterNote(note);
 
