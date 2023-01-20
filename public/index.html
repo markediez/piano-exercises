@@ -22,8 +22,33 @@
         <li data-note="A#" class="black">A# / Bb</li>
         <li data-note="B" class="white">B</li>
       </ul>
-      <ul id="midi-data">
-      </ul>  
+    </div>
+    <div>
+      <select name="rootNote" id="rootNote">
+        <option value="C">C</option>
+        <option value="C#">C#</option>
+        <option value="D">D</option>
+        <option value="D#">D#</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="F#">F#</option>
+        <option value="G">G</option>
+        <option value="G#">G#</option>
+        <option value="A">A</option>
+        <option value="A#">A#</option>
+        <option value="B">B</option>
+      </select>
+      <select name="scale" id="scale">
+        <option value="Major">Major</option>
+        <option value="Natural Minor">Natural Minor</option>
+        <option value="Blues">Blues</option>
+      </select>
+    </div>
+    <div>
+      <input type="button" value="Clear" onclick="clearAnswer()">
+      <input type="button" value="Check" onclick="checkAnswer()">
+      <span id="status">Waiting...</span>
+      <ul id="answer"></ul>  
     </div>
   </body>
   <script src="javascript/index.js" type="text/javascript"></script>
