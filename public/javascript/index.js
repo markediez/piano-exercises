@@ -114,6 +114,11 @@ function getBluesScale(numberNote) {
   return buildScale(numberNote, [3, 2, 1, 1, 3, 2])
 }
 
+function getPentatonicScale(numberNote) {
+  // 1 3 4 5 6
+  return buildScale(numberNote, [4, 1, 2, 2, 3])
+}
+
 function onMIDImessage(messageData) {
   var noteOn = messageData.data[0] 
   var note = messageData.data[1]
@@ -158,6 +163,8 @@ function getExpectedAnswer() {
     expectedAnswer = getNaturalMinorScale(rootNoteNumber);
   } else if (scale == "Blues") {
     expectedAnswer = getBluesScale(rootNoteNumber);
+  } else if (scale == "Pentatonic") {
+    expectedAnswer = getPentatonicScale(rootNoteNumber);
   } else { 
     throw new Error(`Scale '${scale}' is not implemented`);
   }
