@@ -96,6 +96,11 @@ function buildScale(rootNumber, steps) {
     answer.push(lastNote);
   })
 
+  steps.slice().reverse().forEach(step => {
+    lastNote -= step;
+    answer.push(lastNote)
+  })
+
   return answer;
 }
 
