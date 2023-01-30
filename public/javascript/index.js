@@ -1,7 +1,9 @@
 // public/javascript/index.js
-var context = new AudioContext();
-var oscillators = {};
+import { Piano } from './piano.js';
+// var context = new AudioContext();
+// var oscillators = {};
 var midi, data;
+var piano = new Piano();
 
 if (navigator.requestMIDIAccess) {
   navigator.requestMIDIAccess({
@@ -87,43 +89,6 @@ function toNumberNote(letterNote) {
   }
 }
 
-function buildScale(rootNumber, steps) {
-  let lastNote = rootNumber;
-  let answer = [ lastNote ]
-  
-  steps.forEach(step => {
-    lastNote += step;
-    answer.push(lastNote);
-  })
-
-  steps.slice().reverse().forEach(step => {
-    lastNote -= step;
-    answer.push(lastNote)
-  })
-
-  return answer;
-}
-
-function getMajorScale(numberNote) {
-  // W W H W W W H
-  return buildScale(numberNote, [2, 2, 1, 2, 2, 2, 1])
-}
-
-function getNaturalMinorScale(numberNote) {
-  // Major Scale but 3b 6b 7b
-  return buildScale(numberNote, [2, 1, 2, 2, 1, 2, 2])
-}
-
-function getBluesScale(numberNote) {
-  // Based on Major Scale: 1 3b 4 5b 5 7b
-  return buildScale(numberNote, [3, 2, 1, 1, 3, 2])
-}
-
-function getPentatonicScale(numberNote) {
-  // 1 3 4 5 6
-  return buildScale(numberNote, [4, 1, 2, 2, 3])
-}
-
 function onMIDImessage(messageData) {
   var noteOn = messageData.data[0] 
   var note = messageData.data[1]
@@ -159,25 +124,31 @@ function addAnswer(note) {
 function getExpectedAnswer() {
   let rootNote = document.getElementById("rootNote").value
   let scale = document.getElementById("scale").value
+  let octaves = document.getElementById("octaves").value
+  let descend = document.getElementById("descend").checked
   let rootNoteNumber = toNumberNote(rootNote);
   let expectedAnswer = null;
+  let isFlat = rootNote.includes("b");
 
   if (scale == "Major") {
-    expectedAnswer = getMajorScale(rootNoteNumber);
+    expectedAnswer = piano.majorScale(rootNoteNumber, octaves, descend);
   } else if (scale == "Natural Minor") {
-    expectedAnswer = getNaturalMinorScale(rootNoteNumber);
+    expectedAnswer = piano.naturalMinorScale(rootNoteNumber, octaves, descend);
   } else if (scale == "Blues") {
-    expectedAnswer = getBluesScale(rootNoteNumber);
+    expectedAnswer = piano.bluesScale(rootNoteNumber, octaves, descend);
   } else if (scale == "Pentatonic") {
-    expectedAnswer = getPentatonicScale(rootNoteNumber);
+    expectedAnswer = piano.pentatonicScale(rootNoteNumber, octaves, descend);
   } else { 
     throw new Error(`Scale '${scale}' is not implemented`);
   }
 
   let expectedAnswerInLetters = []
-  expectedAnswer.forEach(noteNumber => {
-    let letterNote = toLetterNote(noteNumber)
-    expectedAnswerInLetters.push(letterNote);
+  expectedAnswer.forEach(note => {
+    if (isFlat) {
+      expectedAnswerInLetters.push(note.toFlatString());
+    } else {
+      expectedAnswerInLetters.push(note.toSharpString());
+    }
   })
 
   return expectedAnswerInLetters
@@ -215,10 +186,12 @@ function checkAnswer() {
   } else {
     document.getElementById("status").innerHTML = "Nope :("
   }
-  
 }
 
 function clearAnswer() {
   document.getElementById("answer").replaceChildren();
   document.getElementById("status").innerHTML = "Waiting..."
 }
+
+window.checkAnswer = checkAnswer;
+window.clearAnswer = clearAnswer;
