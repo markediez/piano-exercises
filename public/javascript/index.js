@@ -43,15 +43,14 @@ function onMIDImessage(messageData) {
   }
 
   var note = piano.keys[input % 12];
-  var letterNote = note.letter;
 
-  var el = document.querySelector(`[data-note='${letterNote}']`)
+  var el = document.querySelector(`[data-note='${note.letter}']`)
   // Would use @noteOn instead of velocity... but noteOn is always 144 (on) for some midi keyboards
   if (velocity > 0) {
     el.classList.add("active");
   } else {
     el.classList.remove("active");
-    addAnswer(letterNote)
+    addAnswer(note)
   }
 }
 
@@ -61,13 +60,24 @@ function clearAnswer() {
     el.removeChild(el.lastChild);
   }
 }
+
 function addAnswer(note) {
-  var newItem = document.createElement("li")
-  newItem.appendChild(document.createTextNode(note));
   const el = document.getElementById("answer")
+  const answerIndex = el.children.length;
+  const expectedNote = EXPECTED_ANSWER[answerIndex];
+  
+  console.log(note);
+  console.log(expectedNote);
+  var newItem = document.createElement("li")
+  if (note.equals(expectedNote)) {
+    newItem.appendChild(document.createTextNode(expectedNote.letter));
+  } else {
+    newItem.classList.add("danger");
+    newItem.appendChild(document.createTextNode(note.letter));
+  }
+  el.append(newItem);
   
   if (el.children.length < EXPECTED_ANSWER.length) {
-    el.append(newItem);
   }
 }
 

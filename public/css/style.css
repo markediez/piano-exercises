@@ -5,3 +5,7 @@ ul#keyboard li {
 ul#keyboard li.active {
     background-color: lightblue;
 }
+
+ul#answer li.danger {
+    background-color: red;
+}
