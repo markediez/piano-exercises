@@ -63,11 +63,13 @@ function clearAnswer() {
 
 function addAnswer(note) {
   const el = document.getElementById("answer")
-  const answerIndex = el.children.length;
+  if (el.children.length == EXPECTED_ANSWER.length) {
+    nextPrompt();
+    return;
+  }
+  const answerIndex = el.lastChild && el.lastChild.classList.contains("danger") ? el.children.length - 1 : el.children.length;
   const expectedNote = EXPECTED_ANSWER[answerIndex];
   
-  console.log(note);
-  console.log(expectedNote);
   var newItem = document.createElement("li")
   if (note.equals(expectedNote)) {
     newItem.appendChild(document.createTextNode(expectedNote.letter));
@@ -75,10 +77,11 @@ function addAnswer(note) {
     newItem.classList.add("danger");
     newItem.appendChild(document.createTextNode(note.letter));
   }
-  el.append(newItem);
-  
-  if (el.children.length < EXPECTED_ANSWER.length) {
+
+  if (el.lastChild && el.lastChild.classList.contains("danger")) {
+    el.removeChild(el.lastChild)
   }
+  el.append(newItem);
 }
 
 function addNotes(rootElement) {
@@ -120,8 +123,6 @@ function addPatterns(rootElement) {
 
 function setExpected(note, pattern, octaves, descend) {
   EXPECTED_ANSWER = piano.buildScale(Notes[note].number, Patterns[pattern], octaves, descend);
-
-  console.log(EXPECTED_ANSWER);
 }
 
 function nextPrompt() {
