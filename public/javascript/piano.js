@@ -17,18 +17,18 @@ export const Patterns = {
 export class Piano {
     constructor() {
         this.keys = [
-            Notes.C,
-            Notes.CSharp,
-            Notes.D,
-            Notes.DSharp,
-            Notes.E,
-            Notes.F,
-            Notes.FSharp,
-            Notes.G,
-            Notes.GSharp,
-            Notes.A,
-            Notes.ASharp,
-            Notes.B
+            Notes["C"],
+            Notes["C#"],
+            Notes["D"],
+            Notes["D#"],
+            Notes["E"],
+            Notes["F"],
+            Notes["F#"],
+            Notes["G"],
+            Notes["G#"],
+            Notes["A"],
+            Notes["A#"],
+            Notes["B"]
         ]
     }
 
