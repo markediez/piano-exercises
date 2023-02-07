@@ -1,5 +1,21 @@
 import { Notes } from './note.js'
 
+export const Scales = {
+    // W W H W W W H
+    Major: [2, 2, 1, 2, 2, 2, 1],
+    // major but 3b 6b 7b
+    NaturalMinor: [2, 1, 2, 2, 1, 2, 2],
+    // major but 1 3b 4 5b 5 7b
+    MinorBlues: [3, 2, 1, 1, 3, 2],
+    // major but 1 3 4 5 6
+    Pentatonic: [4, 1, 2, 2, 3]
+}
+
+export const Modes = {
+    // Natural Minor
+    Aeolian: [2, 1, 2, 2, 1, 2, 2]
+}
+
 export class Piano {
     constructor() {
         this.keys = [

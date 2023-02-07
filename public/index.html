@@ -24,41 +24,28 @@
       </ul>
     </div>
     <div>
-      <select name="rootNote" id="rootNote">
-        <option value="C">C</option>
-        <option value="C#">C#</option>
-        <option value="Db">Db</option>
-        <option value="D">D</option>
-        <option value="D#">D#</option>
-        <option value="Eb">Eb</option>
-        <option value="E">E</option>
-        <option value="F">F</option>
-        <option value="F#">F#</option>
-        <option value="Gb">Gb</option>
-        <option value="G">G</option>
-        <option value="G#">G#</option>
-        <option value="Ab">Ab</option>
-        <option value="A">A</option>
-        <option value="A#">A#</option>
-        <option value="Bb">Bb</option>
-        <option value="B">B</option>
-      </select>
-      <select name="scale" id="scale">
-        <option value="Major">Major</option>
-        <option value="Natural Minor">Natural Minor</option>
-        <option value="Blues">Blues</option>
-        <option value="Pentatonic">Pentatonic</option>
-      </select>
-      <input type="number" placeholder="octaves" name="octaves" id="octaves" value="1">
-      <input type="checkbox" name="descend" id="descend" checked>
-      <label for="descend">Descend</label>
-    </div>
-    <div>
-      <input type="button" value="Clear" onclick="clearAnswer()">
-      <input type="button" value="Check" onclick="checkAnswer()">
-      <span id="status">Waiting...</span>
-      <ul id="answer"></ul>  
-    </div>
+      <div id="rootNotes">
+        <!-- Filled via JS -->
+      </div>
+      <div id="scales">
+        <!-- Filled via JS -->
+      </div>
+      <div id="modes">
+        <!-- Filled via JS -->
+      </div>
+      <div>
+        <input type="number" placeholder="octaves" name="octaves" id="octaves" value="1">
+        <label for="octaves">Octaves</label>
+        <input type="checkbox" name="descend" id="descend" checked>
+        <label for="descend">Descend</label>
+      </div>
+      <div>
+        <input type="button" value="Start" onclick="start()">
+      </div>
+
+      <span id="prompt" data-note="" data-type="">
+        Press Start!
+      </span>
   </body>
   
   <script src="javascript/note.js" type="module"></script>

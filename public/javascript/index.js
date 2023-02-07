@@ -1,9 +1,16 @@
 // public/javascript/index.js
-import { Piano } from './piano.js';
+import { Piano, Scales, Modes } from './piano.js';
+import { Notes } from './note.js';
+
 // var context = new AudioContext();
 // var oscillators = {};
 var midi, data;
 var piano = new Piano();
+
+var PROMPT_NOTES = [];
+var PROMPT_MODIFIERS = [];
+var EXPECTED_ANSWER = [];
+var CURRENT_ANSWER = [];
 
 if (navigator.requestMIDIAccess) {
   navigator.requestMIDIAccess({
@@ -170,28 +177,91 @@ function compareNotes(scale1, scale2) {
   return correct;
 }
 
-function checkAnswer() {
-  let answer = []
-  const el = document.getElementById("answer")
-  const expectedAnswer = getExpectedAnswer()
+function addNotes(rootElement) {
+  for (const key in Notes) {
+    let value = Notes[key];
+    let cbox = document.createElement("input");
+    cbox.type = "checkbox";
+    cbox.checked = false;
+    cbox.value = value.toString();
+    cbox.id = key;
 
-  for (child of el.children) {
-    answer.push(child.innerHTML);
-  }
-
-  console.log(answer);
-  console.log(expectedAnswer);
-  if (compareNotes(answer, expectedAnswer)) {
-    document.getElementById("status").innerHTML = "Correct!"
-  } else {
-    document.getElementById("status").innerHTML = "Nope :("
+    let cboxLabel = document.createElement("label");
+    cboxLabel.htmlFor = key;
+    cboxLabel.innerHTML = value.toString();
+    
+    
+    rootElement.appendChild(cbox);
+    rootElement.appendChild(cboxLabel);
   }
 }
 
-function clearAnswer() {
-  document.getElementById("answer").replaceChildren();
-  document.getElementById("status").innerHTML = "Waiting..."
+function addScales(rootElement) {
+  for (const key in Scales) {
+    let cbox = document.createElement("input");
+    cbox.type = "checkbox";
+    cbox.checked = false;
+    cbox.value = key;
+    cbox.id = key;
+
+    let cboxLabel = document.createElement("label");
+    cboxLabel.htmlFor = key;
+    cboxLabel.innerHTML = key;
+    
+    
+    rootElement.appendChild(cbox);
+    rootElement.appendChild(cboxLabel);
+  }
 }
 
-window.checkAnswer = checkAnswer;
-window.clearAnswer = clearAnswer;
+function addModes(rootElement) {
+  for (const key in Modes) {
+    let cbox = document.createElement("input");
+    cbox.type = "checkbox";
+    cbox.checked = false;
+    cbox.value = key;
+    cbox.id = key;
+
+    let cboxLabel = document.createElement("label");
+    cboxLabel.htmlFor = key;
+    cboxLabel.innerHTML = key;
+    
+    
+    rootElement.appendChild(cbox);
+    rootElement.appendChild(cboxLabel);
+  }
+}
+
+function nextPrompt() {
+  let noteIndex = Math.floor(Math.random() * PROMPT_NOTES.length);
+  let modifierIndex = Math.floor(Math.random() * PROMPT_MODIFIERS.length);
+  let promptEl = document.getElementById("prompt");
+
+  promptEl.dataset.note = PROMPT_NOTES[noteIndex];
+  promptEl.dataset.type = PROMPT_MODIFIERS[modifierIndex];
+  promptEl.innerHTML = `${promptEl.dataset.note} ${promptEl.dataset.type}`
+}
+
+function start() {
+  const notes = document.getElementById("rootNotes").querySelectorAll('input[type="checkbox"]:checked');
+  const scales = document.getElementById("scales").querySelectorAll('input[type="checkbox"]:checked');
+  const modes = document.getElementById("modes").querySelectorAll('input[type="checkbox"]:checked');
+
+  PROMPT_NOTES = []
+  notes.forEach(note => PROMPT_NOTES.push(note.value));
+
+  PROMPT_MODIFIERS = []
+  scales.forEach(scale => PROMPT_MODIFIERS.push(scale.value));
+  modes.forEach(mode => PROMPT_MODIFIERS.push(mode.value));
+
+  nextPrompt();
+}
+
+window.start = start;
+window.nextPrompt = nextPrompt;
+
+window.onload = function() {
+  addNotes(document.getElementById("rootNotes"));
+  addScales(document.getElementById("scales"));
+  addModes(document.getElementById("modes"));
+}
