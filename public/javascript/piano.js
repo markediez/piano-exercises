@@ -1,6 +1,6 @@
 import { Notes } from './note.js'
 
-export const Scales = {
+export const Patterns = {
     // W W H W W W H
     Major: [2, 2, 1, 2, 2, 2, 1],
     // major but 3b 6b 7b
@@ -8,10 +8,8 @@ export const Scales = {
     // major but 1 3b 4 5b 5 7b
     MinorBlues: [3, 2, 1, 1, 3, 2],
     // major but 1 3 4 5 6
-    Pentatonic: [4, 1, 2, 2, 3]
-}
+    Pentatonic: [4, 1, 2, 2, 3],
 
-export const Modes = {
     // Natural Minor
     Aeolian: [2, 1, 2, 2, 1, 2, 2]
 }
@@ -34,7 +32,7 @@ export class Piano {
         ]
     }
 
-    #buildScale(noteIndex, steps, octaves=1, descend=false) {
+    buildScale(noteIndex, steps, octaves=1, descend=false) {
         let lastNoteIndex = noteIndex;
         let answer = [ this.keys[lastNoteIndex] ]
         
@@ -63,25 +61,5 @@ export class Piano {
         }
     
         return answer;
-    }
-
-    majorScale(numberNote, octaves, descend) {
-        // W W H W W W H
-        return this.#buildScale(numberNote, [2, 2, 1, 2, 2, 2, 1], octaves, descend)
-    }
-
-    naturalMinorScale(numberNote, octaves, descend) {
-        // Major Scale but 3b 6b 7b
-        return this.#buildScale(numberNote, [2, 1, 2, 2, 1, 2, 2], octaves, descend)
-    }
-
-    bluesScale(numberNote, octaves, descend) {
-        // Based on Major Scale: 1 3b 4 5b 5 7b
-        return this.#buildScale(numberNote, [3, 2, 1, 1, 3, 2], octaves, descend)
-    }
-
-    pentatonicScale(numberNote, octaves, descend) {
-        // 1 3 4 5 6
-        return this.#buildScale(numberNote, [4, 1, 2, 2, 3], octaves, descend)
     }
 }

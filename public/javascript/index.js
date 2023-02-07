@@ -1,5 +1,5 @@
 // public/javascript/index.js
-import { Piano, Scales, Modes } from './piano.js';
+import { Piano, Patterns } from './piano.js';
 import { Notes } from './note.js';
 
 // var context = new AudioContext();
@@ -128,39 +128,6 @@ function addAnswer(note) {
   }
 }
 
-function getExpectedAnswer() {
-  let rootNote = document.getElementById("rootNote").value
-  let scale = document.getElementById("scale").value
-  let octaves = document.getElementById("octaves").value
-  let descend = document.getElementById("descend").checked
-  let rootNoteNumber = toNumberNote(rootNote);
-  let expectedAnswer = null;
-  let isFlat = rootNote.includes("b");
-
-  if (scale == "Major") {
-    expectedAnswer = piano.majorScale(rootNoteNumber, octaves, descend);
-  } else if (scale == "Natural Minor") {
-    expectedAnswer = piano.naturalMinorScale(rootNoteNumber, octaves, descend);
-  } else if (scale == "Blues") {
-    expectedAnswer = piano.bluesScale(rootNoteNumber, octaves, descend);
-  } else if (scale == "Pentatonic") {
-    expectedAnswer = piano.pentatonicScale(rootNoteNumber, octaves, descend);
-  } else { 
-    throw new Error(`Scale '${scale}' is not implemented`);
-  }
-
-  let expectedAnswerInLetters = []
-  expectedAnswer.forEach(note => {
-    if (isFlat) {
-      expectedAnswerInLetters.push(note.toFlatString());
-    } else {
-      expectedAnswerInLetters.push(note.toSharpString());
-    }
-  })
-
-  return expectedAnswerInLetters
-}
-
 function compareNotes(scale1, scale2) {
   // Version 1 -- dumb check to be exactly the same
   let correct = true;
@@ -196,8 +163,8 @@ function addNotes(rootElement) {
   }
 }
 
-function addScales(rootElement) {
-  for (const key in Scales) {
+function addPatterns(rootElement) {
+  for (const key in Patterns) {
     let cbox = document.createElement("input");
     cbox.type = "checkbox";
     cbox.checked = false;
@@ -214,45 +181,37 @@ function addScales(rootElement) {
   }
 }
 
-function addModes(rootElement) {
-  for (const key in Modes) {
-    let cbox = document.createElement("input");
-    cbox.type = "checkbox";
-    cbox.checked = false;
-    cbox.value = key;
-    cbox.id = key;
+function setExpected(note, pattern, octaves, descend) {
+  // Clear current stuff
+  CURRENT_ANSWER = [];
+  EXPECTED_ANSWER = piano.buildScale(Notes[note].number, Patterns[pattern], octaves, descend);
 
-    let cboxLabel = document.createElement("label");
-    cboxLabel.htmlFor = key;
-    cboxLabel.innerHTML = key;
-    
-    
-    rootElement.appendChild(cbox);
-    rootElement.appendChild(cboxLabel);
-  }
+  console.log(EXPECTED_ANSWER);
 }
 
 function nextPrompt() {
   let noteIndex = Math.floor(Math.random() * PROMPT_NOTES.length);
   let modifierIndex = Math.floor(Math.random() * PROMPT_MODIFIERS.length);
   let promptEl = document.getElementById("prompt");
+  let octaves = document.getElementById("octaves").value
+  let descend = document.getElementById("descend").checked
 
   promptEl.dataset.note = PROMPT_NOTES[noteIndex];
-  promptEl.dataset.type = PROMPT_MODIFIERS[modifierIndex];
-  promptEl.innerHTML = `${promptEl.dataset.note} ${promptEl.dataset.type}`
+  promptEl.dataset.pattern = PROMPT_MODIFIERS[modifierIndex];
+  promptEl.innerHTML = `${promptEl.dataset.note} ${promptEl.dataset.pattern}`
+
+  setExpected(promptEl.dataset.note, promptEl.dataset.pattern, octaves, descend);
 }
 
 function start() {
   const notes = document.getElementById("rootNotes").querySelectorAll('input[type="checkbox"]:checked');
-  const scales = document.getElementById("scales").querySelectorAll('input[type="checkbox"]:checked');
-  const modes = document.getElementById("modes").querySelectorAll('input[type="checkbox"]:checked');
+  const patterns = document.getElementById("patterns").querySelectorAll('input[type="checkbox"]:checked');
 
   PROMPT_NOTES = []
   notes.forEach(note => PROMPT_NOTES.push(note.value));
 
   PROMPT_MODIFIERS = []
-  scales.forEach(scale => PROMPT_MODIFIERS.push(scale.value));
-  modes.forEach(mode => PROMPT_MODIFIERS.push(mode.value));
+  patterns.forEach(scale => PROMPT_MODIFIERS.push(scale.value));
 
   nextPrompt();
 }
@@ -262,6 +221,5 @@ window.nextPrompt = nextPrompt;
 
 window.onload = function() {
   addNotes(document.getElementById("rootNotes"));
-  addScales(document.getElementById("scales"));
-  addModes(document.getElementById("modes"));
+  addPatterns(document.getElementById("patterns"));
 }
