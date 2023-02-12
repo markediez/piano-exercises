@@ -9,7 +9,7 @@ var port = process.env.PORT || 8080;
 
 const server = https.createServer({key: key, cert: cert }, app);
 server.listen(port);
-app.use(express.static('public'));
+app.use(express.static('docs'));
 
 
 //var server = app.listen(port);
