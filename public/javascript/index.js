@@ -56,6 +56,7 @@ function onMIDImessage(messageData) {
 
 function clearAnswer() {
   const el = document.getElementById("answer");
+  el.classList.remove("success");
   while (el.firstChild) {
     el.removeChild(el.lastChild);
   }
@@ -82,6 +83,10 @@ function addAnswer(note) {
     el.removeChild(el.lastChild)
   }
   el.append(newItem);
+
+  if (el.children.length == EXPECTED_ANSWER.length) {
+    el.classList.add("success");
+  }
 }
 
 function addNotes(rootElement) {

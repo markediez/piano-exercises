@@ -6,6 +6,10 @@ ul#keyboard li.active {
     background-color: lightblue;
 }
 
+ul#answer.success {
+    background-color: green;
+}
+
 ul#answer li.danger {
     background-color: red;
 }
