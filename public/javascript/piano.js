@@ -11,7 +11,8 @@ export const Patterns = {
     Pentatonic: [4, 1, 2, 2, 3],
 
     // Natural Minor
-    Aeolian: [2, 1, 2, 2, 1, 2, 2]
+    Aeolian: [2, 1, 2, 2, 1, 2, 2],
+    Dorian: [2, 1, 2, 2, 2, 1, 2]
 }
 
 export class Piano {
